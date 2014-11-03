@@ -8,9 +8,9 @@ import com.hyman.mybatis.model.Column;
 import com.hyman.mybatis.model.Table;
 
 
-public class ClassGenerator {
+public class EntityGenerator {
 	
-	public ClassGenerator() {
+	public EntityGenerator() {
 		
 	}
 	

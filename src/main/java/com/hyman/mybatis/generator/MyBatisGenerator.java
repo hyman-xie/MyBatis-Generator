@@ -10,22 +10,25 @@ public class MyBatisGenerator {
 	
 	private TableService tableService;
 	private TemplateService templateService;
-	private ClassGenerator classGenerator;
+	private EntityGenerator classGenerator;
 	private TemplateGenerator templateGenerator;
+	private MapperGenerator mapperGenerator;
 	
-	public MyBatisGenerator(TableService tableService, TemplateService templateService, ClassGenerator classGenerator, TemplateGenerator templateGenerator) {
+	public MyBatisGenerator(TableService tableService, TemplateService templateService, EntityGenerator classGenerator, TemplateGenerator templateGenerator, MapperGenerator mapperGenerator) {
 		this.tableService = tableService;
 		this.templateService = templateService;
 		this.classGenerator = classGenerator;
 		this.templateGenerator = templateGenerator;
+		this.mapperGenerator=mapperGenerator;
 	}
 
-	public void generate(String entityPackage, String entityOutputDirectory,String mapperPackage, String templateFilePath, String templateOutputDirectory) throws Exception{
+	public void generate(String entityPackage, String entityOutputDirectory,String mapperPackage, String templateFilePath, String templateOutputDirectory, String mapperOutputDirectory) throws Exception{
 		List<Table> tables=tableService.getTablesFromMetaData();
 		for(Table table : tables){
-			String template=templateService.freemarkerDo(table, templateFilePath, entityPackage, mapperPackage);
+			String template=templateService.freemarkerDo(templateFilePath, entityPackage, mapperPackage,table);
 			classGenerator.generateClass(entityOutputDirectory, entityPackage, table);
-			templateGenerator.generateTemplate(templateOutputDirectory, template, table.getName());
+			templateGenerator.generateTemplate(templateOutputDirectory, template, table);
+			mapperGenerator.generateMapper(entityPackage, mapperPackage, mapperOutputDirectory, table);
 		}
 	}
 }

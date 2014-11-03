@@ -34,7 +34,7 @@ public class TemplateService{
 		}
 	}
 	
-	public String freemarkerDo(Table table, String fieldPath, String entityPackage, String mapperPackage) throws Exception {
+	public String freemarkerDo(String fieldPath, String entityPackage, String mapperPackage,Table table) throws Exception {
 		try {
 			Map<String, Object> datamodel=new HashMap<String, Object>();
 			datamodel.put("ENTITY_PACKAGE", entityPackage);

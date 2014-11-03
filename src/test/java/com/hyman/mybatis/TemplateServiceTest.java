@@ -46,7 +46,7 @@ public class TemplateServiceTest {
 		columns.add(birthDateColumn);
 		columns.add(descriptionColumn);
 		table.setColumns(columns);
-		String out = templateService.freemarkerDo(table, "src/main/resources/mybatis/mapper/MapperTemplate.xml", "com.hyman", "com.hyman");
+		String out = templateService.freemarkerDo("src/main/resources/mybatis/mapper/MapperTemplate.xml", "com.hyman", "com.hyman", table);
 		System.err.println(out);
 	}
 
