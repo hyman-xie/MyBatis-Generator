@@ -1,7 +1,5 @@
-package com.hyman.mybatis;
+package com.hyman.mybatis.service;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -14,8 +12,7 @@ import java.util.List;
 import com.hyman.mybatis.model.Column;
 import com.hyman.mybatis.model.Table;
 
-
-public class Generator {
+public class TableService {
 	
 	private String delimiter="_";
 	private String tablePrefix="bc";
@@ -23,10 +20,8 @@ public class Generator {
 	private String username;
 	private String password;
 	
-	public Generator(String delimiter, String tablePrefix, String url, String username, String password) {
+	public TableService(String url, String username, String password) {
 		super();
-		this.delimiter = delimiter;
-		this.tablePrefix = tablePrefix;
 		this.url = url;
 		this.username = username;
 		this.password = password;
@@ -44,54 +39,6 @@ public class Generator {
 			out=out.replace(delimiter+i.toLowerCase(), i);
 		}
 		return out;
-	}
-	
-	public void generateClass(String directory, String packagePath,Table table) throws IOException{
-		File dir=new File(directory);
-		if(!dir.exists()){			
-			dir.mkdirs();
-		}
-		File file=new File(directory+File.separator+table.getName()+".java");
-		FileWriter fileWriter=new FileWriter(file);
-		StringBuffer out=new StringBuffer();
-		if(packagePath!=null){			
-			out.append("package "+packagePath+";\n");
-			out.append("\n");
-		}
-		out.append("import java.util.Date;\n");
-		out.append("import com.hyman.mybatis.model.ABaseEntity;\n");
-		out.append("\n");
-		out.append("public class "+table.getName()+" extends ABaseEntity{\n");
-		out.append("\n");
-		for(Column column : table.getColumns()){
-			out.append("\t");
-			out.append("private "+column.getType()+" "+column.getName()+";\n");
-		}
-		
-		for(Column column : table.getColumns()){
-			out.append("\t");
-			out.append("public "+column.getType()+" get"+column.getCapitalName()+"() {");
-			out.append("\n");
-			out.append("\t\t");
-			out.append("return "+column.getName()+";");
-			out.append("\n");
-			out.append("\t}");
-			out.append("\n");
-			
-			out.append("\t");
-			out.append("public void set"+column.getCapitalName()+"("+column.getType()+" "+column.getName()+") {");
-			out.append("\n");
-			out.append("\t\t");
-			out.append("this."+column.getName()+" = "+column.getName()+";");
-			out.append("\n");
-			out.append("\t}");
-			out.append("\n");
-		}
-		
-		out.append("\n}");
-		
-		fileWriter.write(out.toString());
-		fileWriter.close();
 	}
 	
 	private String getJavaTypeFromJDBCType(String type){
@@ -131,6 +78,7 @@ public class Generator {
 				Column column=new Column();
 				column.setName(columnName);
 				column.setDbName(originalColumnName);
+				column.setDbType(columnType);
 				column.setType(getJavaTypeFromJDBCType(columnType));
 				column.setSize(columnSize);
 				columns.add(column);
@@ -143,7 +91,7 @@ public class Generator {
 		}
 		return out;
 	}
-	
+
 	public String getUrl() {
 		return url;
 	}

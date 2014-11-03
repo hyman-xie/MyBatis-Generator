@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="${MAPPER_PACKAGE}.${table.name}Mapper">
+	<resultMap id="${table.name}ResultMap" type="${ENTITY_PACKAGE}.${table.name}">
+	<#list table.columns as item>  
+   		<#if item.name = "id">
+   		<id column="id" property="id"/>
+   		</#if>
+   		<#if item.name != "id">
+   		<result column="${item.dbName}" property="${item.name}"/>
+   		</#if>   
+  	</#list>  
+	</resultMap>
+	<delete id="removeEntity">
+		DELETE FROM ${table.dbName}
+		WHERE id = ${r"#{id}"}
+	</delete>
+	<insert id="addEntity">
+		<selectKey resultType="long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO ${table.dbName} (
+		<#list table.columns as item>
+			<#if item.name != "id"> 
+				${item.dbName}<#if item_has_next>,</#if> 
+			</#if>  
+	  	</#list>
+		)
+		VALUES 	(				
+		<#list table.columns as item>
+			<#if item.name != "id"> 
+				${r"#{"}${item.name}${r"}"}<#if item_has_next>,</#if> 
+			</#if>  
+	  	</#list>
+		)
+	</insert>
+	<update id="updateEntity">
+		UPDATE ${table.dbName}
+		SET 
+		<#list table.columns as item>
+			<#if item.name != "id"> 
+				${item.dbName} = ${r"#{"}${item.name}${r"}"}<#if item_has_next>,</#if> 
+			</#if>  
+	  	</#list>  
+		WHERE id = ${r"#{id}"}
+	</update>
+	<select id="getEntity" resultMap="${table.name}ResultMap">
+		SELECT *
+		FROM ${table.dbName}
+		WHERE id = ${r"#{id}"}
+	</select>
+</mapper>

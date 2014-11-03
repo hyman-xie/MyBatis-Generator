@@ -1,4 +1,6 @@
-package com.hyman.mybatis.model;
+package com.hyman.mybatis.model.entity.impl;
+
+import com.hyman.mybatis.model.entity.IEntity;
 
 public abstract class ABaseEntity implements IEntity {
 

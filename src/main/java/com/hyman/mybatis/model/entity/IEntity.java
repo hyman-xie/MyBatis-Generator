@@ -1,4 +1,4 @@
-package com.hyman.mybatis.model;
+package com.hyman.mybatis.model.entity;
 
 import java.io.Serializable;
 

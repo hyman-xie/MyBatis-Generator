@@ -9,6 +9,7 @@ public class Column implements Serializable {
 	private String dbName;
 	private String name;
 	private String type;
+	private String dbType;
 	private int size;
 	
 	public Column() {
@@ -59,5 +60,11 @@ public class Column implements Serializable {
 			return name.substring(0,1).toUpperCase()+name.substring(1, name.length());
 		}
 		return name;
+	}
+	public String getDbType() {
+		return dbType;
+	}
+	public void setDbType(String dbType) {
+		this.dbType = dbType;
 	}
 }
