@@ -12,7 +12,7 @@ import com.hyman.mybatis.service.TemplateService;
 
 public class TemplateServiceTest {
 
-	@Test
+//	@Test
 	public void testTemplate() throws Exception {
 		TemplateService templateService = new TemplateService();
 		

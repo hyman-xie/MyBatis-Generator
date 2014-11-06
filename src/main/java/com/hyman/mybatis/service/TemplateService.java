@@ -3,11 +3,13 @@ package com.hyman.mybatis.service;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.hyman.mybatis.model.Table;
 
@@ -17,11 +19,16 @@ import freemarker.template.Template;
 
 public class TemplateService{
 		
-	private Template getTemplate(String fieldpath) throws IOException {
+	private Template getTemplate(String templateFilePath) throws IOException {
 		String template = null;
 		try {
-			File file=new File(fieldpath);
-			template=FileUtils.readFileToString(file);
+			if(templateFilePath==null){
+				InputStream in = this.getClass().getResourceAsStream("/mybatis/mapper/MapperTemplate.xml");
+				template=IOUtils.toString(in);
+			}else{				
+				File file=new File(templateFilePath);
+				template=FileUtils.readFileToString(file);
+			}
 			Configuration freemarkerCfg = new Configuration();
 			StringTemplateLoader tl = new StringTemplateLoader();
 			freemarkerCfg.setURLEscapingCharset("utf-8");
@@ -34,21 +41,21 @@ public class TemplateService{
 		}
 	}
 	
-	public String freemarkerDo(String fieldPath, String entityPackage, String mapperPackage,Table table) throws Exception {
+	public String freemarkerDo(String templateFilePath, String entityPackage, String mapperPackage,Table table) throws Exception {
 		try {
 			Map<String, Object> datamodel=new HashMap<String, Object>();
 			datamodel.put("ENTITY_PACKAGE", entityPackage);
 			datamodel.put("MAPPER_PACKAGE", mapperPackage);
 			datamodel.put("table", table);
-			return freemarkerDo(datamodel, fieldPath);
+			return freemarkerDo(datamodel, templateFilePath);
 		} catch (Exception e) {
 			throw e;
 		}
 	}
 	
-	public String freemarkerDo(Map<String, Object> datamodel, String fieldPath) throws Exception {
+	public String freemarkerDo(Map<String, Object> datamodel, String templateFilePath) throws Exception {
 		try {
-			Template t = getTemplate(fieldPath);
+			Template t = getTemplate(templateFilePath);
 			if(t==null) {
 				return null;
 			}
@@ -61,5 +68,10 @@ public class TemplateService{
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	
+	public static void main(String[] args) throws IOException {
+		TemplateService t=new TemplateService();
+		t.getTemplate(null);
 	}
 }

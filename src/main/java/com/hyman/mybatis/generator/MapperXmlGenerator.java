@@ -8,9 +8,9 @@ import org.apache.commons.io.FileUtils;
 import com.hyman.mybatis.model.Table;
 
 
-public class TemplateGenerator {
+public class MapperXmlGenerator {
 
-	public TemplateGenerator() {
+	public MapperXmlGenerator() {
 		
 	}
 	

@@ -20,11 +20,8 @@ public class TableService {
 	private String username;
 	private String password;
 	
-	public TableService(String url, String username, String password) {
-		super();
-		this.url = url;
-		this.username = username;
-		this.password = password;
+	public TableService() {
+		
 	}
 
 	private String formatName(String prefix,String delimiter,String name){
@@ -55,13 +52,13 @@ public class TableService {
 		return out;
 	}
 	
-	public DatabaseMetaData getDatabaseMetaData() throws SQLException{
+	public DatabaseMetaData getDatabaseMetaData(String url, String username, String password) throws SQLException{
 		Connection conn=DriverManager.getConnection(url, username, password);
 		return conn.getMetaData();
 	}
 	
-	public List<Table> getTablesFromMetaData() throws SQLException, IOException{
-		DatabaseMetaData databaseMetaData=getDatabaseMetaData();
+	public List<Table> getTablesFromMetaData(String url, String username, String password) throws SQLException, IOException{
+		DatabaseMetaData databaseMetaData=getDatabaseMetaData(url, username, password);
 		List<Table> out=new ArrayList<Table>();
 		ResultSet resultSet=databaseMetaData.getTables(null, null, tablePrefix+"%", null);
 		while(resultSet.next()){
