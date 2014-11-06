@@ -23,7 +23,7 @@ public class TemplateService{
 		String template = null;
 		try {
 			if(templateFilePath==null){
-				InputStream in = this.getClass().getResourceAsStream("/mybatis/mapper/MapperTemplate.xml");
+				InputStream in = this.getClass().getResourceAsStream("/mybatis/template/MapperTemplate.xml");
 				template=IOUtils.toString(in);
 			}else{				
 				File file=new File(templateFilePath);
