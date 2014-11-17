@@ -14,8 +14,8 @@ public class MapperXmlGenerator {
 		
 	}
 	
-	public void generateTemplate(String templateDirecotry, String template, Table table) throws IOException{
-		FileUtils.writeStringToFile(new File(templateDirecotry+File.separator+table.getName()+"Mapper.xml"), template, "UTF-8");
+	public void generateTemplate(String mapperXmlDirecotry, String mapperXmlContent, Table table) throws IOException{
+		FileUtils.writeStringToFile(new File(mapperXmlDirecotry+File.separator+table.getName()+"Mapper.xml"), mapperXmlContent, "UTF-8");
 	}
 	
 }

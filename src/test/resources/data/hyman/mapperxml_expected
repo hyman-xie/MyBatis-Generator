@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyman.HymanMapper">
+	<resultMap id="HymanResultMap" type="com.hyman.Hyman">
+   		<id column="id" property="id"/>
+   		<result column="name" property="name"/>
+   		<result column="birth_date" property="birthDate"/>
+   		<result column="description" property="description"/>
+	</resultMap>
+	<delete id="removeEntity">
+		DELETE FROM hyman
+		WHERE id = #{id}
+	</delete>
+	<insert id="addEntity">
+		<selectKey resultType="long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO hyman (
+				name, 
+				birth_date, 
+				description 
+		)
+		VALUES 	(				
+				#{name}, 
+				#{birthDate}, 
+				#{description} 
+		)
+	</insert>
+	<update id="updateEntity">
+		UPDATE hyman
+		SET 
+				name = #{name}, 
+				birth_date = #{birthDate}, 
+				description = #{description} 
+		WHERE id = #{id}
+	</update>
+	<select id="getEntity" resultMap="HymanResultMap">
+		SELECT *
+		FROM hyman
+		WHERE id = #{id}
+	</select>
+</mapper>

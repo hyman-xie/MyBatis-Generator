@@ -1,0 +1,9 @@
+package com.hyman.mybatis.dao.mapper;
+
+import com.hyman.mybatis.dao.IBaseMapper;
+import com.hyman.mybatis.model.entity.Product;
+
+public interface ProductMapper extends IBaseMapper<Product>{
+
+
+}

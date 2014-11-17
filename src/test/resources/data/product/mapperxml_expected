@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hyman.mybatis.dao.mapper.ProductMapper">
+	<resultMap id="ProductResultMap" type="com.hyman.mybatis.model.entity.Product">
+   		<id column="id" property="id"/>
+   		<result column="NAME" property="name"/>
+   		<result column="STATUS" property="status"/>
+   		<result column="IS_HOT" property="isHot"/>
+   		<result column="CREATE_USER" property="createUser"/>
+   		<result column="CREATE_TIME" property="createTime"/>
+   		<result column="MODIFY_USER" property="modifyUser"/>
+   		<result column="MODIFY_TIME" property="modifyTime"/>
+	</resultMap>
+	<delete id="removeEntity">
+		DELETE FROM TEST_PRODUCT
+		WHERE id = #{id}
+	</delete>
+	<insert id="addEntity">
+		<selectKey resultType="long" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS id
+		</selectKey>
+		INSERT INTO TEST_PRODUCT (
+				NAME, 
+				STATUS, 
+				IS_HOT, 
+				CREATE_USER, 
+				CREATE_TIME, 
+				MODIFY_USER, 
+				MODIFY_TIME 
+		)
+		VALUES 	(				
+				#{name}, 
+				#{status}, 
+				#{isHot}, 
+				#{createUser}, 
+				#{createTime}, 
+				#{modifyUser}, 
+				#{modifyTime} 
+		)
+	</insert>
+	<update id="updateEntity">
+		UPDATE TEST_PRODUCT
+		SET 
+				NAME = #{name}, 
+				STATUS = #{status}, 
+				IS_HOT = #{isHot}, 
+				CREATE_USER = #{createUser}, 
+				CREATE_TIME = #{createTime}, 
+				MODIFY_USER = #{modifyUser}, 
+				MODIFY_TIME = #{modifyTime} 
+		WHERE id = #{id}
+	</update>
+	<select id="getEntity" resultMap="ProductResultMap">
+		SELECT *
+		FROM TEST_PRODUCT
+		WHERE id = #{id}
+	</select>
+</mapper>

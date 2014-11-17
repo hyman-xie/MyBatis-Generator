@@ -1,5 +1,7 @@
 package com.hyman.maven.plugins.mybatis;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
 
 import org.apache.maven.plugin.MojoExecutionException;
@@ -47,19 +49,28 @@ public class MyBatisGeneratorMojo extends AbstractDependencyMojo {
 	@Parameter
 	private String jdbcPassword;
 	
+	@Parameter
+	private String tablePrefix;
+	
+	private Connection connection;
+	
 	@Override
 	protected void doExecute() throws MojoExecutionException, MojoFailureException {
-		if(jdbcUrl==null || jdbcUserName==null || jdbcPassword==null){
+		if(connection==null && (jdbcUrl==null || jdbcUserName==null || jdbcPassword==null)){
 			throw new MojoExecutionException("Please config jdbc parameters!");
 		}
 		try {
 			TableService tableService=new TableService();
+			tableService.setTablePrefix(tablePrefix);
 			TemplateService templateService=new TemplateService();
 			EntityGenerator entityGenerator=new EntityGenerator();
 			MapperXmlGenerator mapperXmlGenerator=new MapperXmlGenerator();
 			MapperGenerator mapperGenerator=new MapperGenerator();
 			
-			List<Table> tables=tableService.getTablesFromMetaData(jdbcUrl, jdbcUserName, jdbcPassword);
+			if(connection==null){				
+				connection=DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
+			}
+			List<Table> tables=tableService.getTables(connection);
 			for(Table table : tables){
 				String template=templateService.freemarkerDo(mapperXmlTemplatePath, entityPackage, mapperPackage,table);
 				entityGenerator.generateClass(entityOutputDirectory, entityPackage, table);
@@ -141,6 +152,22 @@ public class MyBatisGeneratorMojo extends AbstractDependencyMojo {
 
 	public void setJdbcPassword(String jdbcPassword) {
 		this.jdbcPassword = jdbcPassword;
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	public String getTablePrefix() {
+		return tablePrefix;
+	}
+
+	public void setTablePrefix(String tablePrefix) {
+		this.tablePrefix = tablePrefix;
 	}
 	
 }
