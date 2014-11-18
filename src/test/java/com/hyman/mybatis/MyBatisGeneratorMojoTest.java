@@ -39,7 +39,7 @@ public class MyBatisGeneratorMojoTest extends AbstractJUnit4SpringContextTests {
 		out.setMapperXmlOutputDirectory("src/test/resources/mybatis/mapper");
 		out.execute();
 		
-		String entity=FileUtils.readFileToString(new File("src/test/java/com/hyman/mybatis/model/entity/Product.java"));
+		String entity=FileUtils.readFileToString(new File("src/test/java/com/hyman/mybatis/model/entity/impl/Product.java"));
 		String mapper=FileUtils.readFileToString(new File("src/test/java/com/hyman/mybatis/dao/mapper/ProductMapper.java"));
 		String mapperXml=FileUtils.readFileToString(new File("src/test/resources/mybatis/mapper/ProductMapper.xml"));
 		

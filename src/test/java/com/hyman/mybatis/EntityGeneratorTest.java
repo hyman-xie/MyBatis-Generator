@@ -16,7 +16,7 @@ public class EntityGeneratorTest extends ABaseTest {
 	public void testGenerateClass() throws IOException{
 		EntityGenerator entityGenerator=new EntityGenerator();
 		entityGenerator.generateClass("src/test/java/com/hyman/mybatis/model/entity", "com.hyman.mybatis.model.entity", generateTable());
-		String out=FileUtils.readFileToString(new File("src/test/java/com/hyman/mybatis/model/entity/Hyman.java"));
+		String out=FileUtils.readFileToString(new File("src/test/java/com/hyman/mybatis/model/entity/impl/Hyman.java"));
 		String outExpected=FileUtils.readFileToString(new File("src/test/resources/data/hyman/entity_expected"));
 		Assert.isTrue(out.compareTo(outExpected)==0);
 	}

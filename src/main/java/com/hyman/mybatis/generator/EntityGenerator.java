@@ -15,6 +15,9 @@ public class EntityGenerator {
 	}
 	
 	public void generateClass(String entityDirectory, String entityPackage,Table table) throws IOException{
+		entityDirectory=entityDirectory+File.separator+"impl";
+		entityPackage=entityPackage+".impl";
+		
 		File dir=new File(entityDirectory);
 		if(!dir.exists()){			
 			dir.mkdirs();
@@ -27,7 +30,7 @@ public class EntityGenerator {
 			out.append("\n");
 		}
 		out.append("import java.util.Date;\n");
-		out.append("import com.hyman.mybatis.model.entity.impl.ABaseEntity;\n");
+		out.append("import "+entityPackage+".ABaseEntity;\n");
 		out.append("\n");
 		out.append("public class "+table.getName()+" extends ABaseEntity{\n");
 		out.append("\n");

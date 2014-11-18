@@ -5,14 +5,13 @@ import java.util.List;
 
 import com.hyman.mybatis.model.Column;
 import com.hyman.mybatis.model.Table;
-import com.hyman.mybatis.model.entity.impl.Hyman;
 
 public abstract class ABaseTest {
 
 	protected Table generateTable(){
 		Table table = new Table();
-		table.setName(Hyman.class.getSimpleName());
-		table.setDbName(Hyman.class.getSimpleName().toLowerCase());
+		table.setName("Hyman");
+		table.setDbName("hyman");
 		List<Column> columns = new ArrayList<Column>();
 		Column idColumn = new Column();
 		idColumn.setName("id");

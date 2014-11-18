@@ -24,8 +24,8 @@ public class MapperGenerator {
 			out.append("package "+mapperPackage+";\n");
 			out.append("\n");
 		}
-		out.append("import com.hyman.mybatis.dao.IBaseMapper;\n");
-		out.append("import "+entityPackage+"."+table.getName()+";\n");
+		out.append("import "+mapperPackage+".IBaseMapper;\n");
+		out.append("import "+entityPackage+".impl."+table.getName()+";\n");
 		out.append("\n");
 		out.append("public interface "+table.getName()+"Mapper extends IBaseMapper<"+table.getName()+">{\n");
 		out.append("\n");

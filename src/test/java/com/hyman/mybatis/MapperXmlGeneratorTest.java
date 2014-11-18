@@ -16,7 +16,7 @@ public class MapperXmlGeneratorTest extends ABaseTest {
 	public void testGenerateTemplate() throws IOException{
 		MapperXmlGenerator mapperXmlGenerator=new MapperXmlGenerator();
 		String outExpected=FileUtils.readFileToString(new File("src/test/resources/data/hyman/mapperxml_expected"));
-		mapperXmlGenerator.generateTemplate("src/test/resources/mybatis/mapper", outExpected, generateTable());
+		mapperXmlGenerator.generateMapperXml("src/test/resources/mybatis/mapper", outExpected, generateTable());
 		String out=FileUtils.readFileToString(new File("src/test/resources/mybatis/mapper/HymanMapper.xml"));
 		Assert.isTrue(out.compareTo(outExpected)==0);
 	}

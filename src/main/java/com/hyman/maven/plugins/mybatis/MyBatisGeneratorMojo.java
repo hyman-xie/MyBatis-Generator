@@ -1,9 +1,11 @@
 package com.hyman.maven.plugins.mybatis;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.dependency.AbstractDependencyMojo;
@@ -54,6 +56,13 @@ public class MyBatisGeneratorMojo extends AbstractDependencyMojo {
 	
 	private Connection connection;
 	
+	private TemplateService templateService;
+	
+	public MyBatisGeneratorMojo() {
+		super();
+		templateService=new TemplateService();
+	}
+
 	@Override
 	protected void doExecute() throws MojoExecutionException, MojoFailureException {
 		if(connection==null && (jdbcUrl==null || jdbcUserName==null || jdbcPassword==null)){
@@ -62,7 +71,6 @@ public class MyBatisGeneratorMojo extends AbstractDependencyMojo {
 		try {
 			TableService tableService=new TableService();
 			tableService.setTablePrefix(tablePrefix);
-			TemplateService templateService=new TemplateService();
 			EntityGenerator entityGenerator=new EntityGenerator();
 			MapperXmlGenerator mapperXmlGenerator=new MapperXmlGenerator();
 			MapperGenerator mapperGenerator=new MapperGenerator();
@@ -70,18 +78,31 @@ public class MyBatisGeneratorMojo extends AbstractDependencyMojo {
 			if(connection==null){				
 				connection=DriverManager.getConnection(jdbcUrl, jdbcUserName, jdbcPassword);
 			}
+			
+			generateBaseClasses();
+			
 			List<Table> tables=tableService.getTables(connection);
 			for(Table table : tables){
 				String template=templateService.freemarkerDo(mapperXmlTemplatePath, entityPackage, mapperPackage,table);
 				entityGenerator.generateClass(entityOutputDirectory, entityPackage, table);
-				mapperXmlGenerator.generateTemplate(mapperXmlOutputDirectory, template, table);
+				mapperXmlGenerator.generateMapperXml(mapperXmlOutputDirectory, template, table);
 				mapperGenerator.generateMapper(entityPackage, mapperPackage, mapperOutputDirectory, table);
 			}
 		} catch (Exception e) {
 			throw new MojoExecutionException(e.getMessage());
 		}
 	}
-
+	
+	private void generateBaseClasses() throws Exception{
+		String entityInterface=templateService.freemarkerDo("/mybatis/template/IEntityTemplate.xml", entityPackage, mapperPackage, null);
+		String baseEntityInterface=templateService.freemarkerDo("/mybatis/template/ABaseEntityTemplate.xml", entityPackage, mapperPackage, null);
+		String mapperInterface=templateService.freemarkerDo("/mybatis/template/IBaseMapperTemplate.xml", entityPackage, mapperPackage, null);
+		
+		FileUtils.writeStringToFile(new File(entityOutputDirectory+File.separator+"IEntity.java"), entityInterface, "UTF-8");
+		FileUtils.writeStringToFile(new File(entityOutputDirectory+File.separator+"impl"+File.separator+"ABaseEntity.java"), baseEntityInterface, "UTF-8");
+		FileUtils.writeStringToFile(new File(mapperOutputDirectory+File.separator+"IBaseMapper.java"), mapperInterface, "UTF-8");
+	}
+	
 	public String getEntityPackage() {
 		return entityPackage;
 	}
