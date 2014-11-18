@@ -35,4 +35,4 @@ Please check following steps:
 		</plugins>
 	</build>
 
-2. "mvn install" your maven project 
+2."mvn install" your maven project 
