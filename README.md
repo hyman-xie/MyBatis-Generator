@@ -12,7 +12,7 @@ Please check following steps:
 			<plugin>
 				<groupId>com.hyman</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
-				<version>0.9.0-SNAPSHOT</version>
+				<version>1.0.0</version>
 				<executions>
 					<execution>
 						<goals>
